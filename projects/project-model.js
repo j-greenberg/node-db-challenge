@@ -1,13 +1,66 @@
-module.exports = {
-    find, 
-    findById
+const db = require('../data/db-config.js'); 
 
+// Build an API with endpoints for:
+//   - [ ] adding resources.
+//   - [ ] retrieving a list of resources.
+//   - [X] adding projects.
+//   - [X] retrieving a list of projects.
+//   - [ ] adding tasks.
+//   - [ ] retrieving a list of tasks. **The list of tasks should include the project name and project description**.
+
+module.exports = {
+    find, // retrieving a list of projects
+    findById, // 
+    add, // adding projects
+    findTasks, 
 }
 
 function find(){
-    return null; 
+    return db("projects")
 }
 
 function findById(id){
-    return null; 
+    return db('projects')
+        .where({ 'projects.id': id })
+        .then(project => {
+            console.log('Project: ', project); 
+                return db('tasks')
+                .where({ 'tasks.project_id': id })
+                .then(tasks => {
+                    console.log('Tasks: ', tasks); 
+                    return tasks; 
+                })
+                .catch(error => {
+                    console.log('Model task error:', error); 
+                })
+                //return ("Project:", project); 
+        })
+        .catch(error => {
+            console.log('Model error: ', error); 
+            return error; 
+        })
+}
+
+function add(project){
+    return db("projects")
+    .insert(project)
+    .then(response => {
+        console.log(response); 
+    })
+    .catch(error => {
+        console.log(error); 
+    })
+}
+
+function findTasks(id){
+    return db("tasks")
+        .select('*')    
+        .where({ project_id: id })
+        .then(response => {
+            console.log(`Model response: `, response); 
+            return response; 
+        })
+        .catch(error => {
+            console.log(error); 
+        })
 }
