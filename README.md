@@ -52,7 +52,7 @@ A: A foreign key.
 
 - [ ] What do we need in order to have a _many to many_ relationship between two tables.
 
-A: We need to have 2 foreign keys. 
+A: We need to have 2 foreign keys on a third table. 
 
 ## Minimum Viable Product
 

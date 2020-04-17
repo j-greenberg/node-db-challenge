@@ -51,4 +51,29 @@ router.post('/', (req, res) => {
     })
 }); 
 
+// Get all resources
+router.get('/resources', (req, res) => {
+    Projects.findResources()
+        .then(response => {
+            console.log(response); 
+            res.status(200).json({ response }); 
+        })
+        .catch(error => {
+            console.log(error); 
+            res.status(500).json({ error }); 
+        })
+})
+
+router.post('/tasks', (req, res) => {
+    Projects.addTask(req.body)
+        .then(response => {
+            console.log("Task created: ", response); 
+            res.status(200).json({ response })
+        })
+        .catch(error => {
+            console.log(error); 
+            res.status(500).json({ error }); 
+        })
+}); 
+
 module.exports = router; 

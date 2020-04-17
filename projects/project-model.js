@@ -1,18 +1,44 @@
 const db = require('../data/db-config.js'); 
 
 // Build an API with endpoints for:
-//   - [ ] adding resources.
-//   - [ ] retrieving a list of resources.
-//   - [X] adding projects.
-//   - [X] retrieving a list of projects.
-//   - [ ] adding tasks.
-//   - [ ] retrieving a list of tasks. **The list of tasks should include the project name and project description**.
+//   - [X] adding projects. /api/projects: POST
+//   - [X] retrieving a list of projects. /api/projects: GET
+//   - [ ] adding tasks. /api/projects/:id/: POST
+//   - [X] retrieving a list of tasks. **The list of tasks should include the project name and project description**. /api/projects/:id: GET
 
 module.exports = {
     find, // retrieving a list of projects
     findById, // 
     add, // adding projects
+    addTask, 
     findTasks, 
+    findResources, 
+    addResource
+}
+
+function findResources(){ 
+    return db("resources")
+}
+
+function addResource(resource){
+   return db('resources')
+        .insert(resource)
+        .then(id => {
+            console.log('resource added:', id)
+            return db('resources')
+                .select('*')
+                .where({ 'resources.id': id })
+                .then(resource => {
+                    console.log('New resource created: ', resource); 
+                    return resource; 
+                })
+                .catch(error => {
+                    console.log(error); 
+                })
+            })
+        .catch(error => {
+            console.log(error); 
+            })
 }
 
 function find(){
@@ -50,6 +76,17 @@ function add(project){
     .catch(error => {
         console.log(error); 
     })
+}
+
+function addTask(task){
+    return db('tasks')
+        .insert(task)
+        .then(response => {
+            return response; 
+        })
+        .catch(error => {
+            console.log(error);
+        })
 }
 
 function findTasks(id){
